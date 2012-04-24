@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<head>
+		<title>Witchcraft - Technische Dokumentation</title>
+		<author>
+			<name>Andreas Textor und Ralph Erdt</name>
+			<additional>Programmieren 3 Semesteraufgabe WS06/07</additional>
+		</author>
+		<date>16. Januar 2007</date>
+	</head>
+
+	<body>
+		<!-- Niemand hat gesagt dass wir gut LaTeX koennen ;) -->
+		<nbsp/><br/><nbsp/><br/><nbsp/><br/><nbsp/><br/><nbsp/><br/><nbsp/><br/><nbsp/>
+		<br/><nbsp/><br/><nbsp/><br/><nbsp/><br/><nbsp/><br/><nbsp/><br/><nbsp/><br/>
+		<nbsp/><br/><nbsp/><br/><nbsp/><br/><nbsp/><br/><nbsp/><br/><nbsp/><br/><nbsp/><br/>
+		<nbsp/><br/><nbsp/><br/><nbsp/><br/><nbsp/><br/><nbsp/><br/>
+		Autoren: Ralph Erdt (Matr.Nr. 351266) und Andreas Textor (Matr.Nr. 751375)<br/>
+		<br/><br/>
+		Wir erklären hiermit, dass das vorliegende Programm ausschließlich von
+		Ralph Erdt und Andreas Textor und ausschließlich unter der Nutzung der
+		erlaubten Hilfsmittel erstellt wurde. 
+		<pagebreak/>
+		
+		<section name="Hinweise zur technischen Dokumentation">
+			Dieses Dokument ist die Technische Dokumentation; für die Spielanleitung
+			starten Sie bitte das Spiel und wählen im Menü <q>Hilfe - Anleitung</q>.<br/>
+			Die technische Dokumentation wird ergänzt durch die generierte Javadoc-Dokumentation,
+			die die Klassen und deren Methoden im Einzelnen beschreibt, und die im
+			Verzeichnis <e>/dokumentation/javadoc/</e> zu finden ist.<br/>
+			<e>Nomenklatur</e>: Alle Klassennamen beginnen mit <q>T</q>, alle Interfacenamen
+			mit <q>I</q>. Ausnahmen sind SpielApplet<ref>SpielApplet.java</ref>,
+			Main<ref>Main.java</ref> und Game<ref>Game.java</ref>
+			(letzteres ist das Interface, das in der Aufgabenstellung verlangt wird).
+		</section>
+
+		<section name="Spielidee">
+			<subsection name="Grundideen">
+				Witchcraft ist ein <q>Sidescroller</q>, der Spieler fliegt nach rechts,
+				während die Gegner nach links fliegen. Der Spieler steuert eine Hexe
+				auf einem fliegenden Besen, die ankommende Gegner mit Zaubern und schweren
+				Waffen abschießen kann. Die Gestalt der Hexe sowie die Kulisse sind
+				von den Scheibenwelt-Romanen von Terry Pratchett inspririert.
+				Für die Gegner soll gelten <q>Masse statt Klasse</q>, d.h. die Schwierigkeit
+				ergibt sich durch die hohe Anzahl von Gegnern, von denen jeder einzelne
+				alleine leicht zu besiegen ist.<br/>
+				Der Spieler verwendet zum Steuern der Hexe die Pfeiltasten, und zur Kontrolle
+				des Fadenkreuzes die Maus.
+			</subsection>
+
+			<subsection name="Waffen">
+				Die Waffen benötigen keine Munition, aber der Spieler hat einen <q>Magie</q>-Wert,
+				der durch jedes Abfeuern einer Waffe um einen bestimmten Wert reduziert wird.
+				Der Magie-Wert lädt sich konstant von selbst auf, aber nicht so schnell, dass man
+				mit jeder Waffe ununterbrochen feuern könnte. Der Magie-Wert wird im Spiel
+				durch einen blauen Balken am unteren Bildrand angezeigt.
+			</subsection>
+		</section>
+
+		<section name="Quellen">
+			Alle Quellcodes des Spiels wurden von Ralph Erdt und Andreas Textor geschrieben.
+			Alle Bilder (Titel- und Hintergrundbild, Gegner-, Waffen- und Item-Grafiken sowie
+			die Grafiken der Levelsegmente) wurden von Ralph Erdt und Andreas Textor
+			gemalt mittels Inkscape und GIMP (GIMP-Quelldateien, die sich von den im Spiel
+			verwendeten Grafiken unterscheiden (diese befinden sich im Verzeichnis bilder/),
+			befinden sich im Verzeichnis gfxsrc/). Hilfestellungen in der Bedienung des GIMP
+			sowie Überarbeitung des Titelbildes, sowie die Musik des Spiels stammen von 
+			Martin Textor. Die verwendeten Soundeffekte stammen aus verschiedenen freien
+			Quellen im Internet.
+		</section>
+
+		<section name="Die wichtigsten Klassen">
+			<itemize>
+				<item name="-"><e>TVektor</e><ref>TVektor.java</ref>. Da dies ein Spiel im
+					2-dimensionalen Raum ist, sind alle Koordinaten und Bewegungen durch Vektoren
+					dargestellt. Die Klasse TVektor
+					enthält neben den x- und y-Koordinaten auch alle benötigten Rechenoperationen bis
+					hin zur Winkelberechnung zwischen zwei Vektoren. TVektor ist die mit Abstand am
+					häufigsten verwendete Klasse, die Exemplarvariablen x und y sind daher zur
+					Vereinfachung als public deklariert, und benötigen keine get- und set-Methoden.
+				</item>
+				<item name="-"><e>TObjekt</e><ref>TObjekt.java</ref>. Fast alle Spielobjekte,
+					die auf dem Spielfeld auftauchen,
+					sind vom Typ TObjekt oder einer Unterklasse. Die Klasse stellt Vektoren zur
+					Verfügung für Koordinaten (fkoord), Größe (fdim) und gerichteter Bewegung (fgeschw)
+					eines Objektes. Ebenfalls vorhanden sind Methoden zur Bewegung und Kollisionsabfrage,
+					es sind aber keine Methoden zur Darstellung vorhanden.
+				</item>
+				<item name="-"><e>TAnimation</e><ref>TAnimation.java</ref> ist ein Wrapper um eine
+					Liste von BufferedImages
+					sowie einem Zahlenwert, der angibt, wie lange jeder Animationsframe angezeigt
+					werden soll, bevor der nächste ausgewählt wird. Hat ein Objekt nur eine unbewegliche
+					Darstellung, so enthält die Bilderliste nur einen Eintrag.<br/>
+					Welcher Animationsframe der aktuell anzuzeigende ist, entscheidet dabei alleine
+					TAnimation; Objekte, die TAnimation verwenden, müssen sich darum nicht kümmern.
+					TAnimation wird außerdem dazu verwendet, vorab gedrehte Bilder von Geschossen
+					zu speichern, dabei ist jedes gedrehte Bild ein Eintrag in der Bilderliste und
+					wird über die Angabe der Ausrichtung (Drehwinkel) des entsprechenden Geschosses
+					ausgewählt (siehe auch Technische Probleme).
+				</item>
+				<item name="-"><e>TBildObjekt</e><ref>TBildObjekt.java</ref>.
+					Jedes durch ein Bild oder eine Animation repräsentierte Spielobjekt ist vom Typ
+					TBildObjekt, welches von TObjekt erbt und ein Objekt vom Typ TAnimation enthält.
+					Alle Lebewesen (d.h. Spieler und Feinde), Items und Geschosse sind TBildObjekte,
+					außerdem auch Partikel, falls die Einstellung <q>Hohes Grafikdetail</q> gewählt
+					wurde (siehe auch Technische Probleme).
+				</item>
+				<item name="-"><e>TAnzeige</e><ref>TAnzeige.java</ref> erbt von JPanel und ist die spielverwaltende Klasse
+					und enthält Listen zur Verwaltung der Spielobjekte (Gegner, Geschosse, usw.).
+					Hier werden Aufrufe zum Laden von Ressourcen (Konfiguration, Bilder, Sounds, Level)
+					getätigt, Spielobjekte werden bewegt und gezeichnet. Darüber hinaus enthält
+					TAnzeige alle Timer, Maus- und Tastaturlistener.
+				</item>
+			</itemize>
+		</section>
+
+		<section name="Sonstige Klassen">
+			<itemize>
+				<item name="-"><e>TPartikelVerwaltung</e><ref>TPartikelVerwaltung.java</ref>.
+					Alle Effekte wie Funken, Explosionen und
+					Rauch bestehen aus vielen kleinen Partikeln und werden von dieser Klasse verwaltet.
+					Nach aussen hin sichtbar sind nur die Methoden startEffekt(), der man den
+					gewünschen Effekttyp (Enum Partikel) und einen Koordinaten-Vektor, der angibt,
+					wo der Effekt stattfinden soll, übergibt, und eine Methode zum Zeichnen.
+				</item>
+				<item name="-"><e>TConfig</e><ref>TConfig.java</ref> lädt alle Ressourcen aus
+					der Konfigurationsdatei
+					<e>config/witchcraft.xml</e>. Dort sind Bilder und Animationen, Waffen und
+					Geschosse sowie Sounds definiert. Nur Level- und Gegnerdefinitionen werden
+					nicht aus dieser Konfigurationsdatei geladen (siehe Beschreibung von TLevel).
+				</item>
+				<item name="-"><e>TLevel</e><ref>TLevel.java</ref>. Ein Level besteht aus einer
+					Liste von <q>Scheiben</q>,
+					sog. Levelsegmenten, die hier als innere Klasse realisiert sind. Diese werden
+					einfach <q>weitergeschoben</q>, je weiter der Spieler im Level fortschreitet.
+					Dabei hat jedes Levelsegment eine Liste von Feinden, die mit dem Laden des
+					Levels bereits erzeugt werden, und die aktiviert (d.h. in die Feindesliste
+					in TAnzeige eingekettet zur Darstellung und Bewegung) werden, sobald das
+					Levelsegment in den sichtbaren Bereich auf dem Bildschirm reinscrollt.<br/>
+					Außerdem kann ein Levelsegment eine <q>Meldung</q> enthalten, ein Bild, das
+					beim Aktivieren des Levelsegments zentriert dargestellt wird und das
+					z.B. Hinweise zur Bedienung des Spiels oder zur Story enthalten kann.
+				</item>
+				<item name="-"><e>Main</e><ref>Main.java</ref> ist die Klasse, die als erstes
+					gestartet wird: Main
+					erzeugt ein Fenster, eine Menü mit MenuItems sowie eine TAnzeige, und fügt
+					alles zusammen. Die MenuItems sind mit ActionListenern verbunden, die
+					entsprechende Methoden in TAnzeige aufrufen (z.b. <q>Spiel - Neu</q>).
+				</item>
+				<item name="-"><e>Lebewesen und Feinde</e>. Lebewesen sind alle Spielobjekte mit
+					einem <q>Leben</q>, außerdem sind hier die Trefferberechnungen eingebaut. Jedes
+					Lebewesen hat eine <q>Seite</q>, für die es kämpft (0 = Spieler, 1 = Feind, evtl.
+					noch erweiterbar) und Geschosse, die von einer Seite abgefeuert werden, sollen
+					nur Lebewesen der anderen Seite treffen können. TSpieler<ref>TSpieler.java</ref>
+					erbt von TLebewesen<ref>TLebewesen.java</ref> und
+					fügt alle Spieler-spezifischen Variablen und Methoden hinzu (z.B. den Magie-Wert
+					oder gesonderte Bewegung). Ebenfalls von TLebewesen erbt TFeind<ref>TFeind.java</ref>;
+					ein Feind ist ist eine sich autonom bewegende und schiessende Einheit.
+					Im Gegensatz zum Spieler hat jeder Feind nur eine Waffe.<br/>
+					Jeder Feind hat eine Referenz auf ein TFeindDef<ref>TFeindDef.java</ref>-Objekt, das alle
+					Eigenschaften der Feinde dieses Typs zusammenfasst. Hier kann auch ein <q>Muster</q>
+					definiert sein, eines von mehr als 20 festprogrammierten Bewegungsmustern, die
+					ein Fein annehmen kann (Verschiedene lineare, zickzak, sinus- und kreisförmige
+					Bewegungen).
+				</item>
+				<item name="-"><e>TSavegame</e><ref>TSavegame.java</ref> Um die Savegamedateien simpel
+					zu halten, und um den Spieler nach dem Laden nicht direkt in eine unüberschaubare
+					Situation zu werfen, werden dort ausser den essentiellen Spielerinformationen (Leben, Score
+					usw.) nur der Fortschritt des Spielers im Level gespeichert. Beim Laden eines
+					Savegames wird dann vor dem nächsten zu aktivierenden Levelsegment eine Bildschirmbreite
+					<q>Leersegmente</q> gehängt. Dadurch erscheinen Gegner in der richtigen Reihenfolge
+					und Geschwindigkeit, und der Spieler hat eine faire Chance nach dem Laden nicht
+					gleich abgeschossen zu werden.
+				</item>
+				<item name="-"><e>Waffen, Geschosse und Items</e>. Eine Waffe ist eine Sammlung
+					verschiedener Eigenschaften, z.B. Geschwindigkeit und Schadenswirkung der
+					zugehörigen Geschosse.<br/>
+					Ein Geschoss ist eine Instanz der Waffe, z.B. die Rakete (TRakete<ref>TRakete.java</ref>).
+					Da die Boundingbox bei länglichen Geschossen größer wird, aber ein Geschoss
+					beim schrägen Flug (z.B. um 45 Grad gedreht) den Gegner nicht leichter treffen soll,
+					als wenn es horizontal oder vertikal fliegt, wurde bei Geschossen eine separate
+					Hitbox zugefügt. Diese ist quadratisch und hat eine Kantenlänge von
+					<v>min(Geschosslänge, Geschossbreite)</v> und wird mittig im gedrehten Geschoss
+					platziert.
+					Die Rakete schwenkt <q>langsam</q> auf den Zielkurs ein, und beschleunigt dabei. Außerdem
+					gibt es Homing-Missiles, die das Ziel verfolgen, bis dieses zerstört oder
+					verschwunden (aus dem Bildschirm geflogen) ist. Dann fliegen sie in die
+					aktuelle Richtung weiter. Ein Spezialgeschoss ist das Geschoss der
+					<q>Strahlenwaffen</q> (TRail<ref>TRail.java</ref>), die einen
+					<q>instant Hit</q> verursachen.
+					Es gibt also kein fliegendes Geschoss, die grafische Darstellung ist eine
+					Linie zwischen dem Lebewesen, welches gefeuert hat, und dem getroffenen Ziel.
+					Diese Strahlen haben eine <q>TTL</q> (Time to Live), damit sie einen Moment
+					sichtbar bleiben.<br/>
+					Items<ref>TItem.java</ref> sind vom Spieler einsammelbare Gegenstände,
+					die von besiegten Feinden
+					fallen gelassen werden. Items können Waffen oder z.B. die Java-Tasse
+					(Health-Bonus) sein.
+				</item>
+				<item name="-"><e>Sonstige</e>. Alle bisher nicht erwähnten Klassen sind entweder
+					Hilfsklassen (wie z.B. TPaar<ref>TPaar.java</ref> - ein generisches Paar
+					zweier Werte) oder für die Spiellogik nicht interessant und daher hier nicht weiter ausgeführt
+					(z.B. TOptionenFenster<ref>TOptionenFenster.java</ref> - der Einstellungsdialog,
+					der beim Start eines neuen
+					Spieles angezeigt wird). TSharedObjects<ref>TSharedObjects.java</ref> wird im
+					Abschnitt Technische Probleme erläutert.
+				</item>
+			</itemize>
+		</section>
+
+		<section name="Technische Probleme und Lösungen">
+			<itemize>
+				<item name="-"><e>Viele Objekte und langsame Grafikausgabe</e>. Da Java (leider?) 
+					nicht die Möglichkeit bietet, Speicherverwaltung zumindest stellenweise von
+					Hand zu erledigen, wird nach dem Laden der Ressourcen der Garbage-Collector
+					aufgerufen, damit im Ladeprozess erzeugte und jetzt nicht mehr benötigte
+					Objekte entsorgt werden können, und dieser Vorgang nicht das Spiel stört
+					(wo er nämlich ansonsten zu einem Ruckeln am Anfang des Spiels führen würde).
+					Da die Grafikausgabe speziell von Bildern mit Alphakanal (d.h. im RGBA Format,
+					Bilder mit echter Transparenz) sehr langsam ist, wurde die Option eingebaut,
+					das Spiel mit <q>niedrigen Grafikdetails</q> zu Spielen (d.h. kein Hintergrundbild,
+					und programmierte Partikel anstatt Partikeln, die BildObjekte zur Darstellung
+					verwenden). Außerdem lässt sich die Musik im Optionenmenü einschalten - 
+					Standardmässig ist sie abgeschaltet.<br/>
+					Außerdem wurde, um das Spiel zu beschleunigen, darauf geachtet, möglichst
+					wenige Spielobjekte neu zu erzeugen während der Laufzeit. Teure Operationen
+					wie das Drehen der Geschossgrafiken wird zur Ladezeit erledigt: Ein Geschoss
+					wird 31 Mal gedreht und jedes neue Bild als Frame in die Bilderliste eines
+					TAnimationsobjektes eingekettet.
+				</item>
+				<item name="-"><e>Tastaturfokus im Applet</e>. Die der Tastaturfokus im Applet
+					stark browserabhängig ist, die Tastatureingabe für das Spielkonzept aber
+					essentiell ist, wird in der Appletversion des Spiels zuächst nur ein Knopf
+					angezeigt. Erst das Klicken auf den Knopf öffnet das eigentliche Spiel in
+					einem neuen Fenster, wie bei der Applikationsversion.
+				</item>
+				<item name="-"><e>Viele Klassen benötigen Zugriff auf bestimmte Funktionalität</e>.
+					Da einige Klassen wie die für Soundausgabe oder Partikelverwaltung von vielen
+					Klassen Zugriff benötigen, und ein Herumreichen von Referenzen auf Objekte
+					dieser Klassen in Methoden, die selber den Zugriff vielleicht gar nicht benötigen
+					sondern nur weiterreichen den Code unnötig kompliziert und verwirrend machen
+					würde, gibt es die Klasse TSharedObjects<ref>TSharedObjects.java</ref>.
+					Hier können sich die verbreitet
+					benötigtigen Klassen registrieren, und Anfragende können sich durch eine
+					einfache get-Methode Referenzen auf diese Objekte abholen. Diese Funktionalität
+					ist in Klassenmethoden realisiert, da ein Objekt von TSharedObjects sinnfrei
+					wäre.
+				</item>
+				<item name="-"><e>Sound.</e> Aus Geschwindigkeitsgründen werden die Sounds
+					beim Starten des Spiels geladen. Wird für jede Datei ein AudioClip verwendet,
+					kann immer nur eine Instanz eines Sounds zur selben Zeit gespielt werden.
+					Deswegen wird ein Pool von Sounds angelegt, von denen immer der nächste freie
+					zum Spielen ausgewählt wird. Die Ausnahme bildet die Musik, da hiervon auf jeden
+					Fall immer nur ein Exemplar zur selben Zeit abgespielt wird.  Abgesehen davon
+					würden mehrere Exemplare der Musikdatei eine unnötige Menge an Heap verschwenden.
+				</item>
+				<item name="-">Es werden viele <e>statische Listen</e> der verschiedensten Objekte benötigt.
+					(Hier ist nicht die Rede von den Listen, die in TAnzeige sind, und die aktuellen Objekte
+					enthalten.)<br/>
+					Z.B. Werden statische Listen für die vorhandenen Animationen oder verfügbaren Waffen benötigt.
+					Da diese statisch sind (beim Starten werden sie aufgebaut, dann nur noch abgefragt) haben wir
+					einige dieser Liste in die dazugehörige Klasse geschrieben. Z.B. ist die Liste der Waffen in
+					TWaffe.
+				</item>
+				<item name="-"><e>Schreiben von XML-Savegames.</e> Es wurde das Problem beobachtet, dass
+					beim Speichern der Savegames als XML unter Windows das Encoding der Dateien Latin1/ISO-8859-1 war,
+					obwohl die Einstellung für UTF-8 getroffen wurde beim Speichern der Datei. Der XML-Header
+					der Datei enthielt dann auch den String <q>UTF-8</q>, wodurch der XML-Parser beim Laden
+					versuchte, die Datei entsprechend zu interpretieren. Sobald jedoch ein Umlaut z.B.
+					im Spielername auftauchte, führte das zu einer ungültigen UTF-8-Sequenz und das Laden
+					brach an dieser Stelle mit einer entsprechenden Exception ab. Unter Linux trat das
+					Problem sowohl mit UTF-8-Locales als auch mit ISO-8859-Locales nicht auf. Da der Grund
+					für dieses Verhalten unbekannt ist, wurde das Problem nur umgangen, indem unter Windows
+					<q>ISO-8859-15</q> in den XML-Header geschrieben wird. Für die anderen geladenen XML-Dateien
+					ist das Problem nicht relevant, weil diese nicht zur Laufzeit des Spiels bearbeitet
+					werden.
+				</item>
+			</itemize>
+		</section>
+
+		<!-- bis hier ausdrucken -->
+		<pagebreak/>
+
+		<section name="Quellcodes">
+			Die Quellcodes befinden sich nur deswegen in der Datei, damit man über die Referenzen im Text
+			oder das PDF-Inhaltsverzeichnis direkt bestimmte Quelldateien anspringen und die eine oder
+			andere Sache nachlesen kann.<br/>
+			<listing>
+				<incfile>Game.java</incfile>
+				<caption>Game.java</caption>
+			</listing>
+			<listing>
+				<incfile>IPartikel.java</incfile>
+				<caption>IPartikel.java</caption>
+			</listing>
+			<listing>
+				<incfile>Main.java</incfile>
+				<caption>Main.java</caption>
+			</listing>
+			<listing>
+				<incfile>SpielApplet.java</incfile>
+				<caption>SpielApplet.java</caption>
+			</listing>
+			<listing>
+				<incfile>TAnimation.java</incfile>
+				<caption>TAnimation.java</caption>
+			</listing>
+			<listing>
+				<incfile>TAnzeige.java</incfile>
+				<caption>TAnzeige.java</caption>
+			</listing>
+			<listing>
+				<incfile>TBildObjekt.java</incfile>
+				<caption>TBildObjekt.java</caption>
+			</listing>
+			<listing>
+				<incfile>TConfig.java</incfile>
+				<caption>TConfig.java</caption>
+			</listing>
+			<listing>
+				<incfile>TFeind.java</incfile>
+				<caption>TFeind.java</caption>
+			</listing>
+			<listing>
+				<incfile>TFeindDef.java</incfile>
+				<caption>TFeindDef.java</caption>
+			</listing>
+			<listing>
+				<incfile>TGeschoss.java</incfile>
+				<caption>TGeschoss.java</caption>
+			</listing>
+			<listing>
+				<incfile>TItem.java</incfile>
+				<caption>TItem.java</caption>
+			</listing>
+			<listing>
+				<incfile>TLebewesen.java</incfile>
+				<caption>TLebewesen.java</caption>
+			</listing>
+			<listing>
+				<incfile>TLevel.java</incfile>
+				<caption>TLevel.java</caption>
+			</listing>
+			<listing>
+				<incfile>TMenuHTMLzeig.java</incfile>
+				<caption>TMenuHTMLzeig.java</caption>
+			</listing>
+			<listing>
+				<incfile>TObjekt.java</incfile>
+				<caption>TObjekt.java</caption>
+			</listing>
+			<listing>
+				<incfile>TOptionenFenster.java</incfile>
+				<caption>TOptionenFenster.java</caption>
+			</listing>
+			<listing>
+				<incfile>TPaar.java</incfile>
+				<caption>TPaar.java</caption>
+			</listing>
+			<listing>
+				<incfile>TPartikel1.java</incfile>
+				<caption>TPartikel1.java</caption>
+			</listing>
+			<listing>
+				<incfile>TPartikel2.java</incfile>
+				<caption>TPartikel2.java</caption>
+			</listing>
+			<listing>
+				<incfile>TPartikel3.java</incfile>
+				<caption>TPartikel3.java</caption>
+			</listing>
+			<listing>
+				<incfile>TPartikelRauch.java</incfile>
+				<caption>TPartikelRauch.java</caption>
+			</listing>
+			<listing>
+				<incfile>TPartikelVerwaltung.java</incfile>
+				<caption>TPartikelVerwaltung.java</caption>
+			</listing>
+			<listing>
+				<incfile>TRail.java</incfile>
+				<caption>TRail.java</caption>
+			</listing>
+			<listing>
+				<incfile>TRakete.java</incfile>
+				<caption>TRakete.java</caption>
+			</listing>
+			<listing>
+				<incfile>TSavegame.java</incfile>
+				<caption>TSavegame.java</caption>
+			</listing>
+			<listing>
+				<incfile>TSharedObjects.java</incfile>
+				<caption>TSharedObjects.java</caption>
+			</listing>
+			<listing>
+				<incfile>TSound.java</incfile>
+				<caption>TSound.java</caption>
+			</listing>
+			<listing>
+				<incfile>TSpieler.java</incfile>
+				<caption>TSpieler.java</caption>
+			</listing>
+			<listing>
+				<incfile>TText.java</incfile>
+				<caption>TText.java</caption>
+			</listing>
+			<listing>
+				<incfile>TTripel.java</incfile>
+				<caption>TTripel.java</caption>
+			</listing>
+			<listing>
+				<incfile>TVektor.java</incfile>
+				<caption>TVektor.java</caption>
+			</listing>
+			<listing>
+				<incfile>TWaffe.java</incfile>
+				<caption>TWaffe.java</caption>
+			</listing>
+		</section>
+	</body>
+</document>
+

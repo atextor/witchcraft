@@ -1,0 +1,335 @@
+\documentclass[11pt,a4paper,pdftex]{article}
+			\usepackage{a4}
+			\usepackage{german}
+			\usepackage{eurosym}
+			\usepackage{graphicx}
+			\usepackage{amssymb}
+			\usepackage{amsmath}
+			\usepackage{listings}
+			\usepackage[T1]{fontenc}
+			\usepackage[latin9]{inputenc}
+			\usepackage{color}
+			\usepackage{hyperref}
+			\definecolor{darkblue}{rgb}{0,0,.5}
+			\hypersetup{pdftex=true, colorlinks=true, breaklinks=true, linkcolor=darkblue, plainpages=false, menucolor=darkblue, pagecolor=darkblue, urlcolor=darkblue}
+			\lstset{numbers=left, numberstyle=\tiny, stepnumber=3, numbersep=5pt, language=Java, basicstyle=\small, stringstyle=\ttfamily}
+			\oddsidemargin 0.0cm
+			\textwidth 16.0cm
+			\textheight 25.0cm
+			\topmargin -2.0cm
+		\author{Andreas Textor und Ralph Erdt\\{\footnotesize (Programmieren 3 Semesteraufgabe WS06/07)}}\title{Witchcraft - Technische Dokumentation}\date{16. Januar 2007}
+			\begin{document}
+			\maketitle
+		
+		
+		~\\ ~\\ ~\\ ~\\ ~\\ ~\\ ~
+		\\ ~\\ ~\\ ~\\ ~\\ ~\\ ~\\ 
+		~\\ ~\\ ~\\ ~\\ ~\\ ~\\ ~\\ 
+		~\\ ~\\ ~\\ ~\\ ~\\ 
+		Autoren: Ralph Erdt (Matr.Nr. 351266) und Andreas Textor (Matr.Nr. 751375)\\ 
+		\\ \\ 
+		Wir erklären hiermit, dass das vorliegende Programm ausschließlich von
+		Ralph Erdt und Andreas Textor und ausschließlich unter der Nutzung der
+		erlaubten Hilfsmittel erstellt wurde. 
+		\pagebreak
+		
+		\section{Hinweise zur technischen Dokumentation}
+			Dieses Dokument ist die Technische Dokumentation; für die Spielanleitung
+			starten Sie bitte das Spiel und wählen im Menü "`Hilfe - Anleitung"'.\\ 
+			Die technische Dokumentation wird ergänzt durch die generierte Javadoc-Dokumentation,
+			die die Klassen und deren Methoden im Einzelnen beschreibt, und die im
+			Verzeichnis \emph{/dokumentation/javadoc/} zu finden ist.\\ 
+			\emph{Nomenklatur}: Alle Klassennamen beginnen mit "`T"', alle Interfacenamen
+			mit "`I"'. Ausnahmen sind SpielApplet~[\ref{SpielApplet.java}],
+			Main~[\ref{Main.java}] und Game~[\ref{Game.java}]
+			(letzteres ist das Interface, das in der Aufgabenstellung verlangt wird).
+		
+
+		\section{Spielidee}
+			\subsection{Grundideen}
+				Witchcraft ist ein "`Sidescroller"', der Spieler fliegt nach rechts,
+				während die Gegner nach links fliegen. Der Spieler steuert eine Hexe
+				auf einem fliegenden Besen, die ankommende Gegner mit Zaubern und schweren
+				Waffen abschießen kann. Die Gestalt der Hexe sowie die Kulisse sind
+				von den Scheibenwelt-Romanen von Terry Pratchett inspririert.
+				Für die Gegner soll gelten "`Masse statt Klasse"', d.h. die Schwierigkeit
+				ergibt sich durch die hohe Anzahl von Gegnern, von denen jeder einzelne
+				alleine leicht zu besiegen ist.\\ 
+				Der Spieler verwendet zum Steuern der Hexe die Pfeiltasten, und zur Kontrolle
+				des Fadenkreuzes die Maus.
+			
+
+			\subsection{Waffen}
+				Die Waffen benötigen keine Munition, aber der Spieler hat einen "`Magie"'-Wert,
+				der durch jedes Abfeuern einer Waffe um einen bestimmten Wert reduziert wird.
+				Der Magie-Wert lädt sich konstant von selbst auf, aber nicht so schnell, dass man
+				mit jeder Waffe ununterbrochen feuern könnte. Der Magie-Wert wird im Spiel
+				durch einen blauen Balken am unteren Bildrand angezeigt.
+			
+		
+
+		\section{Quellen}
+			Alle Quellcodes des Spiels wurden von Ralph Erdt und Andreas Textor geschrieben.
+			Alle Bilder (Titel- und Hintergrundbild, Gegner-, Waffen- und Item-Grafiken sowie
+			die Grafiken der Levelsegmente) wurden von Ralph Erdt und Andreas Textor
+			gemalt mittels Inkscape und GIMP (GIMP-Quelldateien, die sich von den im Spiel
+			verwendeten Grafiken unterscheiden (diese befinden sich im Verzeichnis bilder/),
+			befinden sich im Verzeichnis gfxsrc/). Hilfestellungen in der Bedienung des GIMP
+			sowie Überarbeitung des Titelbildes, sowie die Musik des Spiels stammen von 
+			Martin Textor. Die verwendeten Soundeffekte stammen aus verschiedenen freien
+			Quellen im Internet.
+		
+
+		\section{Die wichtigsten Klassen}
+			\begin{itemize}
+				\item[-] \emph{TVektor}~[\ref{TVektor.java}]. Da dies ein Spiel im
+					2-dimensionalen Raum ist, sind alle Koordinaten und Bewegungen durch Vektoren
+					dargestellt. Die Klasse TVektor
+					enthält neben den x- und y-Koordinaten auch alle benötigten Rechenoperationen bis
+					hin zur Winkelberechnung zwischen zwei Vektoren. TVektor ist die mit Abstand am
+					häufigsten verwendete Klasse, die Exemplarvariablen x und y sind daher zur
+					Vereinfachung als public deklariert, und benötigen keine get- und set-Methoden.
+				
+				\item[-] \emph{TObjekt}~[\ref{TObjekt.java}]. Fast alle Spielobjekte,
+					die auf dem Spielfeld auftauchen,
+					sind vom Typ TObjekt oder einer Unterklasse. Die Klasse stellt Vektoren zur
+					Verfügung für Koordinaten (fkoord), Größe (fdim) und gerichteter Bewegung (fgeschw)
+					eines Objektes. Ebenfalls vorhanden sind Methoden zur Bewegung und Kollisionsabfrage,
+					es sind aber keine Methoden zur Darstellung vorhanden.
+				
+				\item[-] \emph{TAnimation}~[\ref{TAnimation.java}] ist ein Wrapper um eine
+					Liste von BufferedImages
+					sowie einem Zahlenwert, der angibt, wie lange jeder Animationsframe angezeigt
+					werden soll, bevor der nächste ausgewählt wird. Hat ein Objekt nur eine unbewegliche
+					Darstellung, so enthält die Bilderliste nur einen Eintrag.\\ 
+					Welcher Animationsframe der aktuell anzuzeigende ist, entscheidet dabei alleine
+					TAnimation; Objekte, die TAnimation verwenden, müssen sich darum nicht kümmern.
+					TAnimation wird außerdem dazu verwendet, vorab gedrehte Bilder von Geschossen
+					zu speichern, dabei ist jedes gedrehte Bild ein Eintrag in der Bilderliste und
+					wird über die Angabe der Ausrichtung (Drehwinkel) des entsprechenden Geschosses
+					ausgewählt (siehe auch Technische Probleme).
+				
+				\item[-] \emph{TBildObjekt}~[\ref{TBildObjekt.java}].
+					Jedes durch ein Bild oder eine Animation repräsentierte Spielobjekt ist vom Typ
+					TBildObjekt, welches von TObjekt erbt und ein Objekt vom Typ TAnimation enthält.
+					Alle Lebewesen (d.h. Spieler und Feinde), Items und Geschosse sind TBildObjekte,
+					außerdem auch Partikel, falls die Einstellung "`Hohes Grafikdetail"' gewählt
+					wurde (siehe auch Technische Probleme).
+				
+				\item[-] \emph{TAnzeige}~[\ref{TAnzeige.java}] erbt von JPanel und ist die spielverwaltende Klasse
+					und enthält Listen zur Verwaltung der Spielobjekte (Gegner, Geschosse, usw.).
+					Hier werden Aufrufe zum Laden von Ressourcen (Konfiguration, Bilder, Sounds, Level)
+					getätigt, Spielobjekte werden bewegt und gezeichnet. Darüber hinaus enthält
+					TAnzeige alle Timer, Maus- und Tastaturlistener.
+				
+			\end{itemize}
+		
+
+		\section{Sonstige Klassen}
+			\begin{itemize}
+				\item[-] \emph{TPartikelVerwaltung}~[\ref{TPartikelVerwaltung.java}].
+					Alle Effekte wie Funken, Explosionen und
+					Rauch bestehen aus vielen kleinen Partikeln und werden von dieser Klasse verwaltet.
+					Nach aussen hin sichtbar sind nur die Methoden startEffekt(), der man den
+					gewünschen Effekttyp (Enum Partikel) und einen Koordinaten-Vektor, der angibt,
+					wo der Effekt stattfinden soll, übergibt, und eine Methode zum Zeichnen.
+				
+				\item[-] \emph{TConfig}~[\ref{TConfig.java}] lädt alle Ressourcen aus
+					der Konfigurationsdatei
+					\emph{config/witchcraft.xml}. Dort sind Bilder und Animationen, Waffen und
+					Geschosse sowie Sounds definiert. Nur Level- und Gegnerdefinitionen werden
+					nicht aus dieser Konfigurationsdatei geladen (siehe Beschreibung von TLevel).
+				
+				\item[-] \emph{TLevel}~[\ref{TLevel.java}]. Ein Level besteht aus einer
+					Liste von "`Scheiben"',
+					sog. Levelsegmenten, die hier als innere Klasse realisiert sind. Diese werden
+					einfach "`weitergeschoben"', je weiter der Spieler im Level fortschreitet.
+					Dabei hat jedes Levelsegment eine Liste von Feinden, die mit dem Laden des
+					Levels bereits erzeugt werden, und die aktiviert (d.h. in die Feindesliste
+					in TAnzeige eingekettet zur Darstellung und Bewegung) werden, sobald das
+					Levelsegment in den sichtbaren Bereich auf dem Bildschirm reinscrollt.\\ 
+					Außerdem kann ein Levelsegment eine "`Meldung"' enthalten, ein Bild, das
+					beim Aktivieren des Levelsegments zentriert dargestellt wird und das
+					z.B. Hinweise zur Bedienung des Spiels oder zur Story enthalten kann.
+				
+				\item[-] \emph{Main}~[\ref{Main.java}] ist die Klasse, die als erstes
+					gestartet wird: Main
+					erzeugt ein Fenster, eine Menü mit MenuItems sowie eine TAnzeige, und fügt
+					alles zusammen. Die MenuItems sind mit ActionListenern verbunden, die
+					entsprechende Methoden in TAnzeige aufrufen (z.b. "`Spiel - Neu"').
+				
+				\item[-] \emph{Lebewesen und Feinde}. Lebewesen sind alle Spielobjekte mit
+					einem "`Leben"', außerdem sind hier die Trefferberechnungen eingebaut. Jedes
+					Lebewesen hat eine "`Seite"', für die es kämpft (0 = Spieler, 1 = Feind, evtl.
+					noch erweiterbar) und Geschosse, die von einer Seite abgefeuert werden, sollen
+					nur Lebewesen der anderen Seite treffen können. TSpieler~[\ref{TSpieler.java}]
+					erbt von TLebewesen~[\ref{TLebewesen.java}] und
+					fügt alle Spieler-spezifischen Variablen und Methoden hinzu (z.B. den Magie-Wert
+					oder gesonderte Bewegung). Ebenfalls von TLebewesen erbt TFeind~[\ref{TFeind.java}];
+					ein Feind ist ist eine sich autonom bewegende und schiessende Einheit.
+					Im Gegensatz zum Spieler hat jeder Feind nur eine Waffe.\\ 
+					Jeder Feind hat eine Referenz auf ein TFeindDef~[\ref{TFeindDef.java}]-Objekt, das alle
+					Eigenschaften der Feinde dieses Typs zusammenfasst. Hier kann auch ein "`Muster"'
+					definiert sein, eines von mehr als 20 festprogrammierten Bewegungsmustern, die
+					ein Fein annehmen kann (Verschiedene lineare, zickzak, sinus- und kreisförmige
+					Bewegungen).
+				
+				\item[-] \emph{TSavegame}~[\ref{TSavegame.java}] Um die Savegamedateien simpel
+					zu halten, und um den Spieler nach dem Laden nicht direkt in eine unüberschaubare
+					Situation zu werfen, werden dort ausser den essentiellen Spielerinformationen (Leben, Score
+					usw.) nur der Fortschritt des Spielers im Level gespeichert. Beim Laden eines
+					Savegames wird dann vor dem nächsten zu aktivierenden Levelsegment eine Bildschirmbreite
+					"`Leersegmente"' gehängt. Dadurch erscheinen Gegner in der richtigen Reihenfolge
+					und Geschwindigkeit, und der Spieler hat eine faire Chance nach dem Laden nicht
+					gleich abgeschossen zu werden.
+				
+				\item[-] \emph{Waffen, Geschosse und Items}. Eine Waffe ist eine Sammlung
+					verschiedener Eigenschaften, z.B. Geschwindigkeit und Schadenswirkung der
+					zugehörigen Geschosse.\\ 
+					Ein Geschoss ist eine Instanz der Waffe, z.B. die Rakete (TRakete~[\ref{TRakete.java}]).
+					Da die Boundingbox bei länglichen Geschossen größer wird, aber ein Geschoss
+					beim schrägen Flug (z.B. um 45 Grad gedreht) den Gegner nicht leichter treffen soll,
+					als wenn es horizontal oder vertikal fliegt, wurde bei Geschossen eine separate
+					Hitbox zugefügt. Diese ist quadratisch und hat eine Kantenlänge von
+					\verb|min(Geschosslänge, Geschossbreite)| und wird mittig im gedrehten Geschoss
+					platziert.
+					Die Rakete schwenkt "`langsam"' auf den Zielkurs ein, und beschleunigt dabei. Außerdem
+					gibt es Homing-Missiles, die das Ziel verfolgen, bis dieses zerstört oder
+					verschwunden (aus dem Bildschirm geflogen) ist. Dann fliegen sie in die
+					aktuelle Richtung weiter. Ein Spezialgeschoss ist das Geschoss der
+					"`Strahlenwaffen"' (TRail~[\ref{TRail.java}]), die einen
+					"`instant Hit"' verursachen.
+					Es gibt also kein fliegendes Geschoss, die grafische Darstellung ist eine
+					Linie zwischen dem Lebewesen, welches gefeuert hat, und dem getroffenen Ziel.
+					Diese Strahlen haben eine "`TTL"' (Time to Live), damit sie einen Moment
+					sichtbar bleiben.\\ 
+					Items~[\ref{TItem.java}] sind vom Spieler einsammelbare Gegenstände,
+					die von besiegten Feinden
+					fallen gelassen werden. Items können Waffen oder z.B. die Java-Tasse
+					(Health-Bonus) sein.
+				
+				\item[-] \emph{Sonstige}. Alle bisher nicht erwähnten Klassen sind entweder
+					Hilfsklassen (wie z.B. TPaar~[\ref{TPaar.java}] - ein generisches Paar
+					zweier Werte) oder für die Spiellogik nicht interessant und daher hier nicht weiter ausgeführt
+					(z.B. TOptionenFenster~[\ref{TOptionenFenster.java}] - der Einstellungsdialog,
+					der beim Start eines neuen
+					Spieles angezeigt wird). TSharedObjects~[\ref{TSharedObjects.java}] wird im
+					Abschnitt Technische Probleme erläutert.
+				
+			\end{itemize}
+		
+
+		\section{Technische Probleme und Lösungen}
+			\begin{itemize}
+				\item[-] \emph{Viele Objekte und langsame Grafikausgabe}. Da Java (leider?) 
+					nicht die Möglichkeit bietet, Speicherverwaltung zumindest stellenweise von
+					Hand zu erledigen, wird nach dem Laden der Ressourcen der Garbage-Collector
+					aufgerufen, damit im Ladeprozess erzeugte und jetzt nicht mehr benötigte
+					Objekte entsorgt werden können, und dieser Vorgang nicht das Spiel stört
+					(wo er nämlich ansonsten zu einem Ruckeln am Anfang des Spiels führen würde).
+					Da die Grafikausgabe speziell von Bildern mit Alphakanal (d.h. im RGBA Format,
+					Bilder mit echter Transparenz) sehr langsam ist, wurde die Option eingebaut,
+					das Spiel mit "`niedrigen Grafikdetails"' zu Spielen (d.h. kein Hintergrundbild,
+					und programmierte Partikel anstatt Partikeln, die BildObjekte zur Darstellung
+					verwenden). Außerdem lässt sich die Musik im Optionenmenü einschalten - 
+					Standardmässig ist sie abgeschaltet.\\ 
+					Außerdem wurde, um das Spiel zu beschleunigen, darauf geachtet, möglichst
+					wenige Spielobjekte neu zu erzeugen während der Laufzeit. Teure Operationen
+					wie das Drehen der Geschossgrafiken wird zur Ladezeit erledigt: Ein Geschoss
+					wird 31 Mal gedreht und jedes neue Bild als Frame in die Bilderliste eines
+					TAnimationsobjektes eingekettet.
+				
+				\item[-] \emph{Tastaturfokus im Applet}. Die der Tastaturfokus im Applet
+					stark browserabhängig ist, die Tastatureingabe für das Spielkonzept aber
+					essentiell ist, wird in der Appletversion des Spiels zuächst nur ein Knopf
+					angezeigt. Erst das Klicken auf den Knopf öffnet das eigentliche Spiel in
+					einem neuen Fenster, wie bei der Applikationsversion.
+				
+				\item[-] \emph{Viele Klassen benötigen Zugriff auf bestimmte Funktionalität}.
+					Da einige Klassen wie die für Soundausgabe oder Partikelverwaltung von vielen
+					Klassen Zugriff benötigen, und ein Herumreichen von Referenzen auf Objekte
+					dieser Klassen in Methoden, die selber den Zugriff vielleicht gar nicht benötigen
+					sondern nur weiterreichen den Code unnötig kompliziert und verwirrend machen
+					würde, gibt es die Klasse TSharedObjects~[\ref{TSharedObjects.java}].
+					Hier können sich die verbreitet
+					benötigtigen Klassen registrieren, und Anfragende können sich durch eine
+					einfache get-Methode Referenzen auf diese Objekte abholen. Diese Funktionalität
+					ist in Klassenmethoden realisiert, da ein Objekt von TSharedObjects sinnfrei
+					wäre.
+				
+				\item[-] \emph{Sound.} Aus Geschwindigkeitsgründen werden die Sounds
+					beim Starten des Spiels geladen. Wird für jede Datei ein AudioClip verwendet,
+					kann immer nur eine Instanz eines Sounds zur selben Zeit gespielt werden.
+					Deswegen wird ein Pool von Sounds angelegt, von denen immer der nächste freie
+					zum Spielen ausgewählt wird. Die Ausnahme bildet die Musik, da hiervon auf jeden
+					Fall immer nur ein Exemplar zur selben Zeit abgespielt wird.  Abgesehen davon
+					würden mehrere Exemplare der Musikdatei eine unnötige Menge an Heap verschwenden.
+				
+				\item[-] Es werden viele \emph{statische Listen} der verschiedensten Objekte benötigt.
+					(Hier ist nicht die Rede von den Listen, die in TAnzeige sind, und die aktuellen Objekte
+					enthalten.)\\ 
+					Z.B. Werden statische Listen für die vorhandenen Animationen oder verfügbaren Waffen benötigt.
+					Da diese statisch sind (beim Starten werden sie aufgebaut, dann nur noch abgefragt) haben wir
+					einige dieser Liste in die dazugehörige Klasse geschrieben. Z.B. ist die Liste der Waffen in
+					TWaffe.
+				
+				\item[-] \emph{Schreiben von XML-Savegames.} Es wurde das Problem beobachtet, dass
+					beim Speichern der Savegames als XML unter Windows das Encoding der Dateien Latin1/ISO-8859-1 war,
+					obwohl die Einstellung für UTF-8 getroffen wurde beim Speichern der Datei. Der XML-Header
+					der Datei enthielt dann auch den String "`UTF-8"', wodurch der XML-Parser beim Laden
+					versuchte, die Datei entsprechend zu interpretieren. Sobald jedoch ein Umlaut z.B.
+					im Spielername auftauchte, führte das zu einer ungültigen UTF-8-Sequenz und das Laden
+					brach an dieser Stelle mit einer entsprechenden Exception ab. Unter Linux trat das
+					Problem sowohl mit UTF-8-Locales als auch mit ISO-8859-Locales nicht auf. Da der Grund
+					für dieses Verhalten unbekannt ist, wurde das Problem nur umgangen, indem unter Windows
+					"`ISO-8859-15"' in den XML-Header geschrieben wird. Für die anderen geladenen XML-Dateien
+					ist das Problem nicht relevant, weil diese nicht zur Laufzeit des Spiels bearbeitet
+					werden.
+				
+			\end{itemize}
+		
+
+		
+		\pagebreak
+
+		\section{Quellcodes}
+			Die Quellcodes befinden sich nur deswegen in der Datei, damit man über die Referenzen im Text
+			oder das PDF-Inhaltsverzeichnis direkt bestimmte Quelldateien anspringen und die eine oder
+			andere Sache nachlesen kann.\\ 
+			\addcontentsline{toc}{subsection}{Game.java}\lstinputlisting[caption=Game.java,label=Game.java,frame=trbl]{Game.java}
+			\addcontentsline{toc}{subsection}{IPartikel.java}\lstinputlisting[caption=IPartikel.java,label=IPartikel.java,frame=trbl]{IPartikel.java}
+			\addcontentsline{toc}{subsection}{Main.java}\lstinputlisting[caption=Main.java,label=Main.java,frame=trbl]{Main.java}
+			\addcontentsline{toc}{subsection}{SpielApplet.java}\lstinputlisting[caption=SpielApplet.java,label=SpielApplet.java,frame=trbl]{SpielApplet.java}
+			\addcontentsline{toc}{subsection}{TAnimation.java}\lstinputlisting[caption=TAnimation.java,label=TAnimation.java,frame=trbl]{TAnimation.java}
+			\addcontentsline{toc}{subsection}{TAnzeige.java}\lstinputlisting[caption=TAnzeige.java,label=TAnzeige.java,frame=trbl]{TAnzeige.java}
+			\addcontentsline{toc}{subsection}{TBildObjekt.java}\lstinputlisting[caption=TBildObjekt.java,label=TBildObjekt.java,frame=trbl]{TBildObjekt.java}
+			\addcontentsline{toc}{subsection}{TConfig.java}\lstinputlisting[caption=TConfig.java,label=TConfig.java,frame=trbl]{TConfig.java}
+			\addcontentsline{toc}{subsection}{TFeind.java}\lstinputlisting[caption=TFeind.java,label=TFeind.java,frame=trbl]{TFeind.java}
+			\addcontentsline{toc}{subsection}{TFeindDef.java}\lstinputlisting[caption=TFeindDef.java,label=TFeindDef.java,frame=trbl]{TFeindDef.java}
+			\addcontentsline{toc}{subsection}{TGeschoss.java}\lstinputlisting[caption=TGeschoss.java,label=TGeschoss.java,frame=trbl]{TGeschoss.java}
+			\addcontentsline{toc}{subsection}{TItem.java}\lstinputlisting[caption=TItem.java,label=TItem.java,frame=trbl]{TItem.java}
+			\addcontentsline{toc}{subsection}{TLebewesen.java}\lstinputlisting[caption=TLebewesen.java,label=TLebewesen.java,frame=trbl]{TLebewesen.java}
+			\addcontentsline{toc}{subsection}{TLevel.java}\lstinputlisting[caption=TLevel.java,label=TLevel.java,frame=trbl]{TLevel.java}
+			\addcontentsline{toc}{subsection}{TMenuHTMLzeig.java}\lstinputlisting[caption=TMenuHTMLzeig.java,label=TMenuHTMLzeig.java,frame=trbl]{TMenuHTMLzeig.java}
+			\addcontentsline{toc}{subsection}{TObjekt.java}\lstinputlisting[caption=TObjekt.java,label=TObjekt.java,frame=trbl]{TObjekt.java}
+			\addcontentsline{toc}{subsection}{TOptionenFenster.java}\lstinputlisting[caption=TOptionenFenster.java,label=TOptionenFenster.java,frame=trbl]{TOptionenFenster.java}
+			\addcontentsline{toc}{subsection}{TPaar.java}\lstinputlisting[caption=TPaar.java,label=TPaar.java,frame=trbl]{TPaar.java}
+			\addcontentsline{toc}{subsection}{TPartikel1.java}\lstinputlisting[caption=TPartikel1.java,label=TPartikel1.java,frame=trbl]{TPartikel1.java}
+			\addcontentsline{toc}{subsection}{TPartikel2.java}\lstinputlisting[caption=TPartikel2.java,label=TPartikel2.java,frame=trbl]{TPartikel2.java}
+			\addcontentsline{toc}{subsection}{TPartikel3.java}\lstinputlisting[caption=TPartikel3.java,label=TPartikel3.java,frame=trbl]{TPartikel3.java}
+			\addcontentsline{toc}{subsection}{TPartikelRauch.java}\lstinputlisting[caption=TPartikelRauch.java,label=TPartikelRauch.java,frame=trbl]{TPartikelRauch.java}
+			\addcontentsline{toc}{subsection}{TPartikelVerwaltung.java}\lstinputlisting[caption=TPartikelVerwaltung.java,label=TPartikelVerwaltung.java,frame=trbl]{TPartikelVerwaltung.java}
+			\addcontentsline{toc}{subsection}{TRail.java}\lstinputlisting[caption=TRail.java,label=TRail.java,frame=trbl]{TRail.java}
+			\addcontentsline{toc}{subsection}{TRakete.java}\lstinputlisting[caption=TRakete.java,label=TRakete.java,frame=trbl]{TRakete.java}
+			\addcontentsline{toc}{subsection}{TSavegame.java}\lstinputlisting[caption=TSavegame.java,label=TSavegame.java,frame=trbl]{TSavegame.java}
+			\addcontentsline{toc}{subsection}{TSharedObjects.java}\lstinputlisting[caption=TSharedObjects.java,label=TSharedObjects.java,frame=trbl]{TSharedObjects.java}
+			\addcontentsline{toc}{subsection}{TSound.java}\lstinputlisting[caption=TSound.java,label=TSound.java,frame=trbl]{TSound.java}
+			\addcontentsline{toc}{subsection}{TSpieler.java}\lstinputlisting[caption=TSpieler.java,label=TSpieler.java,frame=trbl]{TSpieler.java}
+			\addcontentsline{toc}{subsection}{TText.java}\lstinputlisting[caption=TText.java,label=TText.java,frame=trbl]{TText.java}
+			\addcontentsline{toc}{subsection}{TTripel.java}\lstinputlisting[caption=TTripel.java,label=TTripel.java,frame=trbl]{TTripel.java}
+			\addcontentsline{toc}{subsection}{TVektor.java}\lstinputlisting[caption=TVektor.java,label=TVektor.java,frame=trbl]{TVektor.java}
+			\addcontentsline{toc}{subsection}{TWaffe.java}\lstinputlisting[caption=TWaffe.java,label=TWaffe.java,frame=trbl]{TWaffe.java}
+		
+	
+			\end{document}
+		
