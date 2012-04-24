@@ -6,9 +6,6 @@ Witchcraft
 Introduction
 ------------
 
-Witchcraft is a sidescroller that was developed by Andreas Textor and Ralph Erdt
-during the Programming 
-
 Witchcraft is a side scroller that was written by Ralph Erdt and Andreas Textor for the
 Programming 3 course at the University of Applied Sciences Wiesbaden during the
 winter semester 06/07. The player controls a witch on her flying broom and can use spells
