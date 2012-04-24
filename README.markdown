@@ -1,7 +1,7 @@
 Witchcraft
 ==========
 
-![Screenshot](screenshots/wshot1.png)
+![Screenshot](https://github.com/atextor/witchcraft/raw/master/screenshots/wshot1.png)
 
 Introduction
 ------------
@@ -19,8 +19,8 @@ frog spell, magic detonator (guided missiles), gonne (machine gun), hexenschuss
 
 Note that the game (and the detailed documentation) is in german, but there isn't really much to read.
 
-![Screenshot](screenshots/wshot2.png)
-![Screenshot](screenshots/wshot3.png)
+![Screenshot](https://github.com/atextor/witchcraft/raw/master/screenshots/wshot2.png)
+![Screenshot](https://github.com/atextor/witchcraft/raw/master/screenshots/wshot3.png)
 
 Quick Start
 -----------
